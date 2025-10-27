@@ -2,18 +2,11 @@
 
 define('INCLUDE_CHECK',true);
 
-require 'connect.php';
-require 'functions.php';
-// Those two files can be included only if INCLUDE_CHECK is defined
+// Единое подключение всех систем
+require_once '../config/system_init.php';
 
-
-session_name('tzLogin');
-// Starting the session
-
-session_set_cookie_params(2*7*24*60*60);
-// Making the cookie live for 2 weeks
-
-session_start();
+// Инициализируем систему логина
+initializeLoginSystem();
 
 if($_SESSION['id'] && !isset($_COOKIE['tzRemember']) && !$_SESSION['rememberMe'])
 {
@@ -49,13 +42,21 @@ if($_POST['submit']=='Login')
 	
 	if(!count($err))
 	{
-		$_POST['username'] = mysql_real_escape_string($_POST['username']);
-		$_POST['password'] = mysql_real_escape_string($_POST['password']);
+		$_POST['username'] = mysqli_real_escape_string($con, $_POST['username']);
+		$_POST['password'] = mysqli_real_escape_string($con, $_POST['password']);
 		$_POST['rememberMe'] = (int)$_POST['rememberMe'];
 		
-		// Escaping all input data
-
-		$row = mysql_fetch_assoc(mysql_query("SELECT id,usr FROM tz_members WHERE usr='{$_POST['username']}' AND pass='".md5($_POST['password'])."'"));
+		// Безопасная обработка данных с использованием prepared statements
+		$usrnm = $_POST['username'];
+		$psswrd = md5($_POST['password']);
+		
+		$sql = "SELECT id,usr FROM tz_members WHERE usr=? AND pass=?";
+		$stmt = mysqli_prepare($con, $sql);
+		mysqli_stmt_bind_param($stmt, "ss", $usrnm, $psswrd);
+		mysqli_stmt_execute($stmt);
+		$result = mysqli_stmt_get_result($stmt);
+		$row = mysqli_fetch_assoc($result);
+		mysqli_stmt_close($stmt);
 
 		if($row['usr'])
 		{
@@ -107,12 +108,12 @@ else if($_POST['submit']=='Register')
 		$pass = substr(md5($_SERVER['REMOTE_ADDR'].microtime().rand(1,100000)),0,6);
 		// Generate a random password
 		
-		$_POST['email'] = mysql_real_escape_string($_POST['email']);
-		$_POST['username'] = mysql_real_escape_string($_POST['username']);
+		$_POST['email'] = mysqli_real_escape_string($con, $_POST['email']);
+		$_POST['username'] = mysqli_real_escape_string($con, $_POST['username']);
 		// Escape the input data
 		
 		
-		mysql_query("	INSERT INTO tz_members(usr,pass,email,regIP,dt)
+		mysqli_query($con, "	INSERT INTO tz_members(usr,pass,email,regIP,dt)
 						VALUES(
 						
 							'".$_POST['username']."',
@@ -123,7 +124,7 @@ else if($_POST['submit']=='Register')
 							
 						)");
 		
-		if(mysql_affected_rows($link)==1)
+		if(mysqli_affected_rows($con)==1)
 		{
 			send_mail(	'jumperfox2@mail.ru',
 						$_POST['email'],

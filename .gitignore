@@ -1,0 +1,73 @@
+# Игнорируем системные файлы
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Игнорируем временные файлы
+*.tmp
+*.temp
+*.log
+*.cache
+*.swp
+*.swo
+*~
+
+# Игнорируем файлы IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Игнорируем файлы Cursor
+.cursorindexingignore
+
+# Игнорируем тестовые файлы
+test_*.php
+debug_*.php
+*_test.php
+*_debug.php
+
+# Игнорируем файлы конфигурации с паролями (если есть)
+config.local.php
+.env
+.env.local
+
+# Игнорируем файлы загрузок
+uploads/
+files/
+temp/
+
+# Игнорируем логи ошибок
+error_logs
+error.log
+access.log
+
+# Игнорируем резервные копии
+*.bak
+*.backup
+*.old
+
+# Игнорируем скомпилированные файлы
+*.min.css
+*.min.js
+*.compiled.*
+
+# Игнорируем файлы сессий (если хранятся в файловой системе)
+sessions/
+tmp/
+
+# Игнорируем файлы кеша
+cache/
+*.cache
+
+# Игнорируем файлы специфичные для хостинга
+.htaccess.local
+robots.txt.local
+
+# Игнорируем файлы с личными данными
+private/
+personal/

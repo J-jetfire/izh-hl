@@ -21,12 +21,9 @@ die;
     //$prtk = $_GET['protokol'];
         //require_once 'header/connect.php';// connect to mysql
         $link = db_connect();
-        $sql = "SELECT * FROM `cupselect`"; // ОПРЕДЕЛЕНИЕ ТЕКУЩЕГО КУБКА И БАЗЫ
-        $records = mysqli_query($link,$sql);
-        while ($row = mysqli_fetch_array($records)){
-            $idofcup = $row['id'];
-        }
-        $players = "players8";
+        
+        // Все переменные кубка уже инициализированы в cup_config.php
+        // $idofcup, $players уже определены автоматически
         include_once "GAME_INFO_8.php";
         
         if ($result<>'-') {

@@ -3,31 +3,40 @@
           
     $prtk = $_GET['protokol'];
 
-    $sql = "SELECT * FROM `cupselect`"; // ОПРЕДЕЛЕНИЕ ТЕКУЩЕГО КУБКА И БАЗЫ
-             $records = mysqli_query($con, $sql);
-            while ($row = mysqli_fetch_array($records)){
-                $idofcup = $row['id'];
-                $league = $row['league'];
-                $season = $row['season'];
-                $part = $row['part'];
-             }    
-    $cup = 8;
-    $calendar = 'calendar8';
-
-    //====================== ENTER DATE OF MATCH
+    // Все переменные кубка уже инициализированы в cup_config.php
+    // $idofcup, $league, $season, $part уже определены
     
-    //====================== ENTER LOGO LINKS
+    // Получаем подключение к БД
+    $con = getDBConnection();
+    
+    // Получаем данные матча
     $sql = "SELECT * FROM $calendar WHERE id='$prtk' ";
-    $records = mysqli_query($con,$sql);
-    $row = mysqli_fetch_array($records);
-    $datematch = $row['date'];
-    $time = $row['time'];
-    $hometeam = $row['home'];
-    $awayteam = $row['away'];
-    $league = $row['league'];
-    $season = $row['season'];
-    $part = $row['part'];
-    $logohome = $row['logohome'];
-    $logoaway = $row['logoaway'];
-    $result = $row['result'];
+    $records = mysqli_query($con, $sql);
+    
+    // Проверяем результат запроса
+    if ($records && mysqli_num_rows($records) > 0) {
+        $row = mysqli_fetch_array($records);
+        $datematch = $row['date'];
+        $time = $row['time'];
+        $hometeam = $row['home'];
+        $awayteam = $row['away'];
+        $league = $row['league'];
+        $season = $row['season'];
+        $part = $row['part'];
+        $logohome = $row['logohome'];
+        $logoaway = $row['logoaway'];
+        $result = $row['result'];
+    } else {
+        // Если матч не найден, устанавливаем значения по умолчанию
+        $datematch = '';
+        $time = '';
+        $hometeam = '';
+        $awayteam = '';
+        $league = getCurrentLeague();
+        $season = getCurrentSeason();
+        $part = getCurrentPart();
+        $logohome = '';
+        $logoaway = '';
+        $result = '-';
+    }
 ?>

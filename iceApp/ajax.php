@@ -1,17 +1,13 @@
 <?php 
 require_once 'connect.php';// connect to mysql
         $link = db_connect();
-        $sql = "SELECT * FROM `cupselect`"; // ОПРЕДЕЛЕНИЕ ТЕКУЩЕГО КУБКА И БАЗЫ
-        $records = mysqli_query($link,$sql);
-        while ($row = mysqli_fetch_array($records)){
-            $idofcup = $row['id'];
-        }
+        
+        // Все переменные кубка уже инициализированы в cup_config.php
+        // $idofcup, $players, $calendar уже определены автоматически
 
 include_once "../GAME_INFO_8.php";
 
 $prtk = $_POST['prtk'];
-    $players = "players8";
-      $calendar = "calendar8";
         $review = "protokol_review8_".$prtk;
           $squad = "protokol_squad8_".$prtk;
 
