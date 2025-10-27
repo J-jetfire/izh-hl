@@ -1,12 +1,13 @@
 <?php
-$dir = "";
-require_once $dir.'login/login.php';
-    $link = $con;//db_connect(); // подключение к базе данных через функцию
+// $dir = "";
+// require_once $dir.'login/login.php';
+// Все переменные кубка уже инициализированы в cup_config.php
+// $idofcup, $league, $season, $part, $calendar уже определены
 
-$prtk = $_GET['protokol'];
-$cup = 7;
-require_once "GAME_INFO_8.php";
 
+require_once "GAME_INFO_8.php"; // Динамическое подключение файла
+
+$cup = $idofcup; // Используем ID кубка из БД
 $title = "ИЖЕВСКАЯ ХОККЕЙНАЯ ЛИГА";
 ?>
     <!DOCTYPE html>
@@ -17,25 +18,21 @@ $title = "ИЖЕВСКАЯ ХОККЕЙНАЯ ЛИГА";
         <link rel="stylesheet" href="css/styleprtk.css">
         <?php
 //====================== ENTER MATCH DATA HERE (down)      
-     $protokol1 = "protokol_squad8_".$prtk;
-    $protokol2 = "protokol_review8_".$prtk;
+    $protokol1 = "protokol_squad{$idofcup}_".$prtk;
+    $protokol2 = "protokol_review{$idofcup}_".$prtk;
     
-require_once 'header/connect.php';// connect to mysql
+// Подключение к БД уже выполнено в login.php
+// Переменная $calendar уже определена в cup_config.php
 
-$calendar = "calendar8";    
-// select query
-    $sql = "SELECT * FROM `$calendar` WHERE date = '$datematch' AND home ='$hometeam' AND away='$awayteam' AND time='$time'";
+// select query - используем данные уже полученные из GAME_INFO
     $sql2 = "SELECT * FROM `$protokol1` WHERE team='$hometeam' ORDER BY pos";
     $sql22 = "SELECT * FROM `$protokol1` WHERE team='$awayteam' ORDER BY pos"; 
     $sql3 = "SELECT * FROM `$protokol2`";
-    //execute the query
-    $records = mysqli_query($link,$sql);
-    $row = mysqli_fetch_array($records);
     
-    $records2 = mysqli_query($link,$sql2);
-    $records22 = mysqli_query($link,$sql22);
-
-    $records3 = mysqli_query($link,$sql3);
+    //execute the query
+    $records2 = mysqli_query($con,$sql2);
+    $records22 = mysqli_query($con,$sql22);
+    $records3 = mysqli_query($con,$sql3);
 //========= match review
     ?>
 
