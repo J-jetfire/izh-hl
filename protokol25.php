@@ -4,10 +4,11 @@
 // Все переменные кубка уже инициализированы в cup_config.php
 // $idofcup, $league, $season, $part, $calendar уже определены
 
-
+$prtk = isset($_GET['protokol']) ? $_GET['protokol'] : '';
 require_once "GAME_INFO_8.php"; // Динамическое подключение файла
 
 $cup = $idofcup; // Используем ID кубка из БД
+$con = getDBConnection(); // Получаем подключение к БД
 $title = "ИЖЕВСКАЯ ХОККЕЙНАЯ ЛИГА";
 ?>
     <!DOCTYPE html>
@@ -78,7 +79,7 @@ $title = "ИЖЕВСКАЯ ХОККЕЙНАЯ ЛИГА";
                     </div>
                     <div class="col-xs-2 text-center" id="rowimg"  style="width:225px;">
                            <br>
-                        <h1><label style="color:#fff;" id="<?=$prtk?>"><?=$row['result']?></label></h1><br>
+                        <h1><label style="color:#fff;" id="<?=$prtk?>"><?=isset($row['result']) ? $row['result'] : $result?></label></h1><br>
                         
                     </div>
                     <div class="col-xs-3 text-right" id="rowimg" style="padding:30px 0 10px 0;width:280px;">

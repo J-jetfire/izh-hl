@@ -1,13 +1,21 @@
 <?php
 $dir = "";
 require_once $dir.'login/login.php';
-if(!$_SESSION['usr']) {
+// Разрешенные пользователи веб-приложения
+$allowedUsers = ['superadmin_18ihl','admin_18ihl','statist'];
+
+// Блокируем неавторизованных или не из списка
+if (empty($_SESSION['usr']) || !in_array($_SESSION['usr'], $allowedUsers, true)) {
     require_once 'header/topper3.php';
-die; 
-} else if($_SESSION['usr']<>'superadmin_18ihl' && $_SESSION['usr']<>'admin_18ihl' && $_SESSION['usr']<>'statist') {
-    require_once 'header/topper3.php';
-die; 
+    die;
 }
+$prtk = $_GET['protokol'];
+// Получаем подключение к БД
+$con = getDBConnection();
+
+// Получаем данные матча
+require_once $dir.'iceApp/dbteams.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -26,7 +34,8 @@ die;
         // $idofcup, $players уже определены автоматически
         include_once "GAME_INFO_8.php";
         
-        if ($result<>'-') {
+        // Если матч уже имеет результат, закрываем доступ для неадминов
+        if ($result<>'-' && !in_array($_SESSION['usr'], $allowedUsers, true)) {
             require_once 'header/topper3.php';
             die;
         }
@@ -50,7 +59,6 @@ die;
 
     </script>
     <?php 
-        include 'iceApp/dbteams.php';
         while($row = mysqli_fetch_array($result_1, MYSQLI_ASSOC)){
         ?>
     <script>
